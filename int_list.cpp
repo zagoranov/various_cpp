@@ -32,7 +32,7 @@ using odd_primes = primes::Tail;
 
 constexpr size_t len = Length<primes>::value;
 
-	//	Inserting to start
+	// Inserting to start
 template<int H, typename T>
 struct IntCons;
 
@@ -43,12 +43,24 @@ struct IntCons<H, IntList<T...>> {
 using L1 = IntList<2,3,4>; 
 using L2 = IntCons<1, L1>::type;   // IntList<1,2,3,4>
 
-	//  List Generator
+	//  Inserting to end
+template<typename T,int H>
+struct IntCons2;
+
+template<int... T, int H>
+struct IntCons2<IntList<T...>, H> {
+	using type = IntList<T..., H>;
+};
+
+	//  List Generator   0 1 2 3 4  
 template <int N, class Collection = IntList<>>
 struct Generate
-{
+{  
     static const int Length = N;
-    using type = typename IntCons<typename Generate<N - 1>::type, Generate<N-1>::Length >::type;
+     //5 4 3 2 1 
+    //using type = typename IntCons<Generate<N-1>::Length, typename Generate<N - 1>::type>::type;
+    // 0 1 2 3 4
+     using type = typename IntCons2<typename Generate<N - 1>::type, Generate<N-1>::Length >::type;
 };
 
 template<>
@@ -57,6 +69,7 @@ struct Generate<0>
     static const int Length = 0;
     using type = IntList<>;
 };
+
 using L3 = Generate<5>::type;      // IntList<0,1,2,3,4>
 
 main() {
