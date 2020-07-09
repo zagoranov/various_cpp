@@ -17,6 +17,13 @@ struct AccTraits<int>{
 };
 
 
+template<>
+struct AccTraits<float>{
+    using AccT = double;
+    static AccT constexpr zero = 0.;   //constexpr for non int types
+};
+
+
 template<typename T>
 auto accum(T const* beg, T const* end) {
     using AccType = typename AccTraits<T>::AccT;
@@ -34,6 +41,9 @@ int main() {
     std::cout << accum(iarr, iarr + 5) << std::endl;
     
     char carr[] = "12345";
-    std::cout << accum(carr, carr + 5);
+    std::cout << accum(carr, carr + 5) << std::endl;
+    
+    float farr[] = {1.1, 2.0, 3.0, 4.0, 5.1};
+    std::cout << accum(farr, farr + 5) << std::endl;
     
 }
