@@ -23,20 +23,30 @@ struct AccTraits<float>{
 };
 
 
-class SumPolicy {
+/*class SumPolicy {
 public:
     template<typename T1, typename T2> 
     static void accumulate(T1& total, T2 const& value) {
         total += value;
     }
 
+};*/
+
+template<typename T1, typename T2> 
+class SumPolicy {
+public:
+    static void accumulate(T1& total, T2 const& value) {
+        total += value;
+    }
+
 };
 
-template<typename T, typename Policy = SumPolicy, typename AT = AccTraits<T> >
+
+template<typename T, template<typename, typename> class Policy = SumPolicy, typename AT = AccTraits<T> >
 auto accum(T const* beg, T const* end) {
     typename AT::AccT total = AccTraits<T>::zero;
     while(beg != end) {
-        Policy::accumulate(total, *beg);
+        Policy<typename AT::AccT, T>::accumulate(total, *beg);
         ++beg;
     }
     return total;
