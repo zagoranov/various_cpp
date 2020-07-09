@@ -16,18 +16,16 @@ struct AccTraits<int>{
     static AccT const zero = 0;
 };
 
-
 template<>
 struct AccTraits<float>{
     using AccT = double;
-    static AccT constexpr zero = 0.;   //constexpr for non int types
+    static AccT constexpr zero = 0.;
 };
 
 
-template<typename T>
+template<typename T, typename AT = AccTraits<T> >
 auto accum(T const* beg, T const* end) {
-    using AccType = typename AccTraits<T>::AccT;
-    AccType total = AccTraits<T>::zero;
+    typename AT::AccT total = AccTraits<T>::zero;
     while(beg != end) {
         total += *beg;
         ++beg;
@@ -37,7 +35,7 @@ auto accum(T const* beg, T const* end) {
 
 int main() {
     
-    int iarr[] = {1,2,3,4,5};
+    int iarr[] = {1, 2, 3, 4, 5};
     std::cout << accum(iarr, iarr + 5) << std::endl;
     
     char carr[] = "12345";
