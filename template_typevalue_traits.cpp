@@ -43,6 +43,22 @@ auto accum(T const* beg, T const* end) {
     return total;
 };
 
+// Boring but shorter version
+/*
+template<typename Iter>
+auto accum(Iter start, Iter end) {
+    using VT = typename std::iterator_traits<Iter>::value_type;
+    VT total{};
+    
+    while(start != end) {
+        total += *start;
+        ++start;
+    }
+    return total;
+};
+*/
+
+
 int main() {
     
     int iarr[] = {1, 2, 3, 4, 5};
